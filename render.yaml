@@ -1,0 +1,89 @@
+services:
+  # ── Web service ──────────────────────────────────────────────────────────────
+  - type: web
+    name: oghie-blog
+    runtime: node
+    plan: starter
+    region: oregon
+
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: npm run start
+
+    # Health check so Render knows when the app is ready
+    healthCheckPath: /api/health
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SANITY_PROJECT_ID
+        value: wbphzmlj
+      - key: NEXT_PUBLIC_SANITY_DATASET
+        value: production
+      - key: SANITY_API_WRITE_TOKEN
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: GNEWS_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: CONTACT_EMAIL
+        sync: false
+      - key: BUFFER_ACCESS_TOKEN
+        sync: false
+      - key: CRON_SECRET
+        sync: false
+
+  # ── Cron: news sync (every 3 hours) ─────────────────────────────────────────
+  # Fetches fresh articles from GNews and stores them in Supabase.
+  # Stays well within the GNews free tier (100 req/day).
+  - type: cron
+    name: oghie-news-sync
+    runtime: node
+    plan: starter
+    region: oregon
+    schedule: "0 */3 * * *"
+
+    buildCommand: echo "no build needed"
+    startCommand: >
+      curl -s -X POST "${NEXT_PUBLIC_SITE_URL}/api/news/sync"
+      -H "x-cron-secret: ${CRON_SECRET}"
+
+    envVars:
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
+      - key: CRON_SECRET
+        sync: false
+
+  # ── Cron: weekly AI blog post generation ────────────────────────────────────
+  # Generates and publishes one AI-assisted blog post every Monday at 08:00 UTC.
+  # Topic rotates through a predefined list (edit startCommand to change).
+  - type: cron
+    name: oghie-post-generate
+    runtime: node
+    plan: starter
+    region: oregon
+    schedule: "0 8 * * 1"
+
+    buildCommand: echo "no build needed"
+    startCommand: >
+      curl -s -X POST "${NEXT_PUBLIC_SITE_URL}/api/posts/generate"
+      -H "Content-Type: application/json"
+      -H "x-cron-secret: ${CRON_SECRET}"
+      -d '{"topic":"Digital marketing trends and strategies for affiliate marketers","category":"digital-marketing"}'
+
+    envVars:
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
+      - key: CRON_SECRET
+        sync: false
