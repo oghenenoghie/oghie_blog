@@ -15,7 +15,7 @@ interface Props {
 
 const components = {
   types: {
-    image: ({ value }: { value: { asset: unknown; alt?: string; caption?: string } }) => (
+    image: ({ value }: { value: { asset: import("@sanity/image-url/lib/types/types").SanityImageSource; alt?: string; caption?: string } }) => (
       <figure className="my-8">
         <div className="relative w-full aspect-video rounded-xl overflow-hidden">
           <Image
