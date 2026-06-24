@@ -53,6 +53,30 @@ export async function getPostsByCategory(categorySlug: string, limit = 12) {
   );
 }
 
+export async function getCategoriesWithPosts(postsPerCategory = 4) {
+  return sanityClient.fetch(
+    `*[_type=="category"] | order(title asc) {
+      _id,
+      title,
+      slug,
+      description,
+      color,
+      "posts": *[_type=="post" && references(^._id) && defined(publishedAt)] | order(publishedAt desc) [0...$limit] {
+        _id,
+        title,
+        slug,
+        excerpt,
+        publishedAt,
+        estimatedReadingTime,
+        mainImage { asset->{ url }, alt },
+        author->{ name }
+      }
+    } [count(posts) > 0]`,
+    { limit: postsPerCategory - 1 },
+    { next: { revalidate: 1800 } }
+  );
+}
+
 export async function getUnpostedAiPosts(limit = 5) {
   return sanityClient.fetch(
     `*[_type=="post" && aiGenerated==true && socialPosted!=true && defined(publishedAt)] | order(publishedAt desc) [0...$limit] { _id, title, slug, excerpt }`,
