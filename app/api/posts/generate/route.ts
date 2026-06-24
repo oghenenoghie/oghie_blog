@@ -3,7 +3,7 @@ import { generateBlogPost, generateSocialPost } from "@/lib/claude";
 import { createClient } from "@sanity/client";
 
 const sanity = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "wbphzmlj",
   dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
   token:     process.env.SANITY_API_WRITE_TOKEN,
   useCdn:    false,
