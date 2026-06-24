@@ -28,17 +28,12 @@ export default function PostCard({ post, featured = false, variant = "default" }
     return (
       <Link
         href={href}
-        className="group block"
+        className={`group grid items-start gap-8 col-span-1 sm:col-span-2${post.mainImage?.asset?.url ? " grid-cols-1 md:grid-cols-2" : ""}`}
         style={{
-          gridColumn: "span 2",
           textDecoration: "none",
           borderTop: "3px solid #121212",
           paddingTop: "1.5rem",
           paddingBottom: "2rem",
-          display: "grid",
-          gridTemplateColumns: post.mainImage?.asset?.url ? "1fr 1fr" : "1fr",
-          gap: "2rem",
-          alignItems: "start",
         }}
       >
         <div>

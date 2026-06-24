@@ -96,10 +96,10 @@ export default function HeroSection({
 
           {/* Grid: featured (left) + secondary (right) */}
           {featured ? (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1px", backgroundColor: "rgba(255,255,255,0.06)" }} className="md:grid-cols-[3fr_2fr]">
+            <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr]" style={{ gap: "1px", backgroundColor: "rgba(255,255,255,0.06)" }}>
 
               {/* Featured story */}
-              <Link href={`/blog/${featured.slug.current}`} className="group" style={{ textDecoration: "none", display: "block", backgroundColor: "var(--color-navy-950)", padding: "0 1.25rem 0 0" }} >
+              <Link href={`/blog/${featured.slug.current}`} className="group md:pr-5" style={{ textDecoration: "none", display: "block", backgroundColor: "var(--color-navy-950)" }} >
                 {featured.mainImage?.asset?.url && (
                   <div style={{ position: "relative", height: "320px", overflow: "hidden", borderRadius: "0.375rem", marginBottom: "1.25rem" }}>
                     <Image
@@ -156,7 +156,7 @@ export default function HeroSection({
               </Link>
 
               {/* Secondary stories */}
-              <div style={{ backgroundColor: "var(--color-navy-950)", padding: "0 0 0 1.25rem", display: "flex", flexDirection: "column", gap: "0" }}>
+              <div className="md:pl-5 pt-5 md:pt-0 border-t border-white/10 md:border-t-0" style={{ backgroundColor: "var(--color-navy-950)", display: "flex", flexDirection: "column", gap: "0" }}>
                 {secondary.slice(0, 3).map((post, i) => (
                   <Link
                     key={post._id}
@@ -227,14 +227,14 @@ export default function HeroSection({
             </div>
           ) : (
             /* Skeleton when no posts yet */
-            <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: "1px", backgroundColor: "rgba(255,255,255,0.06)" }}>
-              <div style={{ backgroundColor: "var(--color-navy-950)", paddingRight: "1.25rem" }}>
+            <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr]" style={{ gap: "1px", backgroundColor: "rgba(255,255,255,0.06)" }}>
+              <div className="md:pr-5" style={{ backgroundColor: "var(--color-navy-950)" }}>
                 <div className="skeleton" style={{ height: "320px", borderRadius: "0.375rem", marginBottom: "1.25rem" }} />
                 <div className="skeleton" style={{ height: "28px", width: "85%", borderRadius: "4px", marginBottom: "0.75rem" }} />
                 <div className="skeleton" style={{ height: "16px", width: "100%", borderRadius: "4px", marginBottom: "0.375rem" }} />
                 <div className="skeleton" style={{ height: "16px", width: "70%", borderRadius: "4px" }} />
               </div>
-              <div style={{ backgroundColor: "var(--color-navy-950)", paddingLeft: "1.25rem" }}>
+              <div className="md:pl-5" style={{ backgroundColor: "var(--color-navy-950)" }}>
                 {[1, 2, 3].map((i) => (
                   <div key={i} style={{ display: "flex", gap: "0.875rem", padding: "1rem 0", borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
                     <div className="skeleton" style={{ width: "90px", height: "68px", flexShrink: 0, borderRadius: "0.25rem" }} />

@@ -61,16 +61,19 @@ export default function Navbar() {
                 }}>
                   Blog
                 </span>
-                <span style={{
-                  marginLeft: "0.625rem",
-                  fontSize: "0.5625rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "#aaaaaa",
-                  alignSelf: "center",
-                  fontFamily: "var(--font-sans), system-ui, sans-serif",
-                }}>
+                <span
+                  className="hidden sm:inline"
+                  style={{
+                    marginLeft: "0.625rem",
+                    fontSize: "0.5625rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: "#aaaaaa",
+                    alignSelf: "center",
+                    fontFamily: "var(--font-sans), system-ui, sans-serif",
+                  }}
+                >
                   Affiliate Marketing
                 </span>
               </div>
