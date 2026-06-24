@@ -19,17 +19,23 @@ const PAGES = [
 ];
 
 const LEGAL = [
-  { label: "Privacy Policy",     href: "/privacy" },
-  { label: "Terms of Use",       href: "/terms" },
+  { label: "Privacy Policy",      href: "/privacy" },
+  { label: "Terms of Use",        href: "/terms" },
   { label: "Affiliate Disclosure", href: "/disclosure" },
 ];
 
+const SANS  = "var(--font-sans), system-ui, sans-serif";
+const SERIF = "var(--font-display), 'Libre Baskerville', Georgia, serif";
+
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: "var(--color-navy-950)", color: "var(--color-navy-400)" }}>
+    <footer style={{ backgroundColor: "#111111", color: "#999999" }}>
+
+      {/* ── Top rule ─────────────────────────────────────────── */}
+      <div style={{ height: "3px", backgroundColor: "#ffffff" }} />
 
       {/* ── Top section ─────────────────────────────────────── */}
-      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)", padding: "3rem 0" }}>
+      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "3rem 0" }}>
         <div className="container-blog">
           <div style={{ display: "grid", gap: "2.5rem" }} className="md:grid-cols-[2fr_1fr_1fr_1fr]">
 
@@ -37,15 +43,15 @@ export default function Footer() {
             <div>
               <Link href="/" style={{ textDecoration: "none", display: "inline-block", marginBottom: "1rem" }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: "2px" }}>
-                  <span style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "1.5rem", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em" }}>
+                  <span style={{ fontFamily: SERIF, fontSize: "1.5rem", fontWeight: 700, color: "#ffffff", letterSpacing: "-0.02em" }}>
                     Oghie
                   </span>
-                  <span style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "1.5rem", fontWeight: 900, color: "var(--color-gold-500)", letterSpacing: "-0.03em" }}>
+                  <span style={{ fontFamily: SERIF, fontSize: "1.5rem", fontWeight: 700, color: "var(--color-gold-400)", letterSpacing: "-0.02em" }}>
                     Blog
                   </span>
                 </div>
               </Link>
-              <p style={{ fontSize: "0.875rem", lineHeight: 1.75, color: "var(--color-navy-400)", maxWidth: "28ch", marginBottom: "1.25rem" }}>
+              <p style={{ fontFamily: SANS, fontSize: "0.875rem", lineHeight: 1.75, color: "#888", maxWidth: "28ch", marginBottom: "1.5rem" }}>
                 Honest guides to finding, joining, and earning from affiliate programs — written for beginners and experienced marketers alike.
               </p>
               <Link
@@ -53,13 +59,17 @@ export default function Footer() {
                 style={{
                   display: "inline-flex", alignItems: "center", gap: "0.5rem",
                   padding: "0.5rem 1.125rem",
-                  borderRadius: "0.375rem",
-                  backgroundColor: "var(--color-gold-500)",
-                  color: "var(--color-navy-950)",
+                  border: "1px solid rgba(255,255,255,0.25)",
+                  color: "#ffffff",
+                  fontFamily: SANS,
                   fontWeight: 700,
-                  fontSize: "0.8125rem",
+                  fontSize: "0.75rem",
                   textDecoration: "none",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  transition: "border-color 0.15s, color 0.15s",
                 }}
+                className="hover:border-white hover:text-white"
               >
                 <Mail size={14} />
                 Get free insights
@@ -68,13 +78,13 @@ export default function Footer() {
 
             {/* Topics */}
             <div>
-              <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-navy-500)", marginBottom: "1rem" }}>
+              <p style={{ fontFamily: SANS, fontSize: "0.625rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#555", marginBottom: "1rem" }}>
                 Topics
               </p>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.625rem" }}>
                 {TOPICS.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} style={{ fontSize: "0.875rem", color: "var(--color-navy-400)", textDecoration: "none", transition: "color 0.15s" }} className="hover:text-white">
+                    <Link href={link.href} style={{ fontFamily: SANS, fontSize: "0.875rem", color: "#888", textDecoration: "none", transition: "color 0.15s" }} className="hover:text-white">
                       {link.label}
                     </Link>
                   </li>
@@ -84,13 +94,13 @@ export default function Footer() {
 
             {/* Pages */}
             <div>
-              <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-navy-500)", marginBottom: "1rem" }}>
+              <p style={{ fontFamily: SANS, fontSize: "0.625rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#555", marginBottom: "1rem" }}>
                 Site
               </p>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.625rem" }}>
                 {PAGES.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} style={{ fontSize: "0.875rem", color: "var(--color-navy-400)", textDecoration: "none", transition: "color 0.15s" }} className="hover:text-white">
+                    <Link href={link.href} style={{ fontFamily: SANS, fontSize: "0.875rem", color: "#888", textDecoration: "none", transition: "color 0.15s" }} className="hover:text-white">
                       {link.label}
                     </Link>
                   </li>
@@ -100,27 +110,27 @@ export default function Footer() {
 
             {/* RSS + social */}
             <div>
-              <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-navy-500)", marginBottom: "1rem" }}>
+              <p style={{ fontFamily: SANS, fontSize: "0.625rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#555", marginBottom: "1rem" }}>
                 Follow
               </p>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.625rem" }}>
                 <li>
-                  <Link href="/rss.xml" style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.875rem", color: "var(--color-navy-400)", textDecoration: "none" }} className="hover:text-white">
+                  <Link href="/rss.xml" style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: SANS, fontSize: "0.875rem", color: "#888", textDecoration: "none" }} className="hover:text-white">
                     <Rss size={14} /> RSS Feed
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://twitter.com" target="_blank" rel="noopener" style={{ fontSize: "0.875rem", color: "var(--color-navy-400)", textDecoration: "none" }} className="hover:text-white">
+                  <Link href="https://twitter.com" target="_blank" rel="noopener" style={{ fontFamily: SANS, fontSize: "0.875rem", color: "#888", textDecoration: "none" }} className="hover:text-white">
                     X / Twitter
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://linkedin.com" target="_blank" rel="noopener" style={{ fontSize: "0.875rem", color: "var(--color-navy-400)", textDecoration: "none" }} className="hover:text-white">
+                  <Link href="https://linkedin.com" target="_blank" rel="noopener" style={{ fontFamily: SANS, fontSize: "0.875rem", color: "#888", textDecoration: "none" }} className="hover:text-white">
                     LinkedIn
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://youtube.com" target="_blank" rel="noopener" style={{ fontSize: "0.875rem", color: "var(--color-navy-400)", textDecoration: "none" }} className="hover:text-white">
+                  <Link href="https://youtube.com" target="_blank" rel="noopener" style={{ fontFamily: SANS, fontSize: "0.875rem", color: "#888", textDecoration: "none" }} className="hover:text-white">
                     YouTube
                   </Link>
                 </li>
@@ -133,7 +143,7 @@ export default function Footer() {
       {/* ── Bottom bar ───────────────────────────────────────── */}
       <div style={{ padding: "1.25rem 0" }}>
         <div className="container-blog" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.75rem" }}>
-          <p style={{ fontSize: "0.8125rem", color: "var(--color-navy-600)" }}>
+          <p style={{ fontFamily: SANS, fontSize: "0.8125rem", color: "#555" }}>
             © {new Date().getFullYear()} Oghie Blog. All rights reserved.
           </p>
           <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
@@ -141,8 +151,8 @@ export default function Footer() {
               <Link
                 key={link.href}
                 href={link.href}
-                style={{ fontSize: "0.8125rem", color: "var(--color-navy-600)", textDecoration: "none" }}
-                className="hover:text-navy-400"
+                style={{ fontFamily: SANS, fontSize: "0.8125rem", color: "#555", textDecoration: "none" }}
+                className="hover:text-gray-400"
               >
                 {link.label}
               </Link>
