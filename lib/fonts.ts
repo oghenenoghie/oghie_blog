@@ -4,6 +4,8 @@ import {
   Cormorant_Garamond,
   DM_Sans,
   DM_Mono,
+  Libre_Baskerville,
+  Lora,
 } from "next/font/google";
 
 // ── oghie_blog core fonts ────────────────────────────────────────────────────
@@ -20,6 +22,28 @@ export const playfair = Playfair_Display({
 export const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  adjustFontFallback: false,
+});
+
+// ── NYT-style editorial fonts ─────────────────────────────────────────────────
+
+export const libreBaskerville = Libre_Baskerville({
+  variable: "--font-cheltenham",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+  preload: false,
+  adjustFontFallback: false,
+});
+
+export const lora = Lora({
+  variable: "--font-imperial",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
   preload: false,
   adjustFontFallback: false,
@@ -59,6 +83,8 @@ export function allFontVariables(...extras: string[]) {
   return [
     playfair.variable,
     inter.variable,
+    libreBaskerville.variable,
+    lora.variable,
     cormorant.variable,
     dmSans.variable,
     dmMono.variable,

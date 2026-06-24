@@ -33,44 +33,43 @@ export default function Navbar() {
   }
 
   return (
-    <header style={{ position: "sticky", top: 0, zIndex: 50 }}>
+    <header style={{ position: "sticky", top: 0, zIndex: 50, backgroundColor: "#ffffff", borderBottom: "1px solid #dfdfdf" }}>
 
-      {/* ── Top bar ─────────────────────────────────────────── */}
-      <div style={{
-        backgroundColor: "var(--color-navy-950)",
-      }}>
+      {/* ── Main bar ─────────────────────────────────────────── */}
+      <div style={{ borderBottom: "2px solid #121212" }}>
         <div className="container-blog">
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "60px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px" }}>
 
             {/* Logo */}
             <Link href="/" style={{ textDecoration: "none", flexShrink: 0 }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: "2px" }}>
                 <span style={{
-                  fontFamily: "var(--font-display), Georgia, serif",
-                  fontSize: "1.5rem",
-                  fontWeight: 900,
-                  color: "#fff",
-                  letterSpacing: "-0.03em",
+                  fontFamily: "var(--font-display), 'Libre Baskerville', Georgia, serif",
+                  fontSize: "1.625rem",
+                  fontWeight: 700,
+                  color: "#121212",
+                  letterSpacing: "-0.02em",
                 }}>
                   Oghie
                 </span>
                 <span style={{
-                  fontFamily: "var(--font-display), Georgia, serif",
-                  fontSize: "1.5rem",
-                  fontWeight: 900,
-                  color: "var(--color-gold-500)",
-                  letterSpacing: "-0.03em",
+                  fontFamily: "var(--font-display), 'Libre Baskerville', Georgia, serif",
+                  fontSize: "1.625rem",
+                  fontWeight: 700,
+                  color: "var(--color-gold-600)",
+                  letterSpacing: "-0.02em",
                 }}>
                   Blog
                 </span>
                 <span style={{
-                  marginLeft: "0.5rem",
-                  fontSize: "0.625rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.15em",
+                  marginLeft: "0.625rem",
+                  fontSize: "0.5625rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: "var(--color-navy-500)",
+                  color: "#aaaaaa",
                   alignSelf: "center",
+                  fontFamily: "var(--font-sans), system-ui, sans-serif",
                 }}>
                   Affiliate Marketing
                 </span>
@@ -78,7 +77,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop right: search + subscribe */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }} className="hidden md:flex">
+            <div style={{ display: "flex", alignItems: "center", gap: "0.875rem" }} className="hidden md:flex">
               {/* Search */}
               <div style={{ position: "relative" }}>
                 {searchOpen ? (
@@ -95,12 +94,13 @@ export default function Navbar() {
                         if (e.key === "Escape") { setSearchOpen(false); setDesktopQuery(""); }
                       }}
                       style={{
-                        background: "rgba(255,255,255,0.08)",
-                        border: "1px solid rgba(255,255,255,0.15)",
-                        borderRadius: "0.5rem",
+                        background: "#f5f5f5",
+                        border: "1px solid #dfdfdf",
+                        borderRadius: "2px",
                         padding: "0.375rem 0.75rem",
-                        color: "#fff",
+                        color: "#121212",
                         fontSize: "0.875rem",
+                        fontFamily: "var(--font-sans), system-ui, sans-serif",
                         outline: "none",
                         width: "220px",
                       }}
@@ -108,13 +108,13 @@ export default function Navbar() {
                     <button
                       onClick={() => navigateSearch(desktopQuery)}
                       aria-label="Go"
-                      style={{ color: "var(--color-gold-500)", background: "none", border: "none", cursor: "pointer", display: "flex" }}
+                      style={{ color: "#121212", background: "none", border: "none", cursor: "pointer", display: "flex" }}
                     >
                       <Search size={16} />
                     </button>
                     <button
                       onClick={() => { setSearchOpen(false); setDesktopQuery(""); }}
-                      style={{ color: "var(--color-navy-400)", background: "none", border: "none", cursor: "pointer" }}
+                      style={{ color: "#888", background: "none", border: "none", cursor: "pointer" }}
                     >
                       <X size={16} />
                     </button>
@@ -125,11 +125,11 @@ export default function Navbar() {
                     aria-label="Search"
                     style={{
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      width: "36px", height: "36px", borderRadius: "0.5rem",
-                      color: "var(--color-navy-400)", background: "none", border: "none", cursor: "pointer",
-                      transition: "color 0.15s, background-color 0.15s",
+                      width: "36px", height: "36px",
+                      color: "#333", background: "none", border: "none", cursor: "pointer",
+                      transition: "color 0.15s",
                     }}
-                    className="hover:text-white hover:bg-white/10"
+                    className="hover:text-black"
                   >
                     <Search size={18} />
                   </button>
@@ -141,18 +141,21 @@ export default function Navbar() {
                 style={{
                   display: "flex", alignItems: "center", gap: "0.4rem",
                   padding: "0.4rem 1rem",
-                  borderRadius: "0.375rem",
-                  backgroundColor: "var(--color-gold-500)",
-                  color: "var(--color-navy-950)",
-                  fontSize: "0.8125rem",
+                  border: "1px solid #121212",
+                  borderRadius: "2px",
+                  backgroundColor: "#121212",
+                  color: "#ffffff",
+                  fontSize: "0.75rem",
                   fontWeight: 700,
                   textDecoration: "none",
-                  letterSpacing: "0.01em",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  fontFamily: "var(--font-sans), system-ui, sans-serif",
                   transition: "background-color 0.15s",
                 }}
-                className="hover:bg-gold-400"
+                className="hover:bg-gray-800"
               >
-                <Rss size={14} />
+                <Rss size={13} />
                 Subscribe
               </Link>
             </div>
@@ -162,7 +165,7 @@ export default function Navbar() {
               className="md:hidden"
               onClick={() => setOpen(!open)}
               aria-label="Toggle menu"
-              style={{ color: "var(--color-navy-300)", background: "none", border: "none", cursor: "pointer", padding: "0.5rem" }}
+              style={{ color: "#333", background: "none", border: "none", cursor: "pointer", padding: "0.5rem" }}
             >
               {open ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -173,16 +176,14 @@ export default function Navbar() {
       {/* ── Category strip ───────────────────────────────────── */}
       <nav
         style={{
-          backgroundColor: "var(--color-navy-950)",
-          borderTop: "1px solid rgba(255,255,255,0.06)",
-          borderBottom: "2px solid var(--color-gold-500)",
+          backgroundColor: "#ffffff",
           overflowX: "auto",
         }}
         className="hidden md:block"
         aria-label="Content categories"
       >
         <div className="container-blog">
-          <div style={{ display: "flex", alignItems: "center", gap: "0", height: "40px", whiteSpace: "nowrap" }}>
+          <div style={{ display: "flex", alignItems: "center", height: "38px", whiteSpace: "nowrap" }}>
             {CATEGORIES.map((cat, i) => (
               <Link
                 key={cat.href}
@@ -192,15 +193,17 @@ export default function Navbar() {
                   height: "100%",
                   display: "flex",
                   alignItems: "center",
-                  fontSize: "0.8rem",
-                  fontWeight: 500,
-                  color: "var(--color-navy-400)",
+                  fontSize: "0.6875rem",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                  color: "#333333",
                   textDecoration: "none",
-                  letterSpacing: "0.01em",
-                  borderRight: i < CATEGORIES.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                  transition: "color 0.15s, background-color 0.15s",
+                  borderRight: i < CATEGORIES.length - 1 ? "1px solid #dfdfdf" : "none",
+                  fontFamily: "var(--font-sans), system-ui, sans-serif",
+                  transition: "color 0.15s",
                 }}
-                className="hover:text-white hover:bg-white/8"
+                className="hover:text-black"
               >
                 {cat.label}
               </Link>
@@ -211,7 +214,7 @@ export default function Navbar() {
 
       {/* ── Mobile menu ──────────────────────────────────────── */}
       {open && (
-        <div style={{ backgroundColor: "var(--color-navy-950)", borderBottom: "1px solid rgba(255,255,255,0.08)" }} className="md:hidden">
+        <div style={{ backgroundColor: "#ffffff", borderTop: "1px solid #dfdfdf" }} className="md:hidden">
           <div className="container-blog" style={{ padding: "1rem 0 1.25rem" }}>
             {/* Search */}
             <div style={{ marginBottom: "1rem", display: "flex", gap: "0.5rem" }}>
@@ -223,12 +226,13 @@ export default function Navbar() {
                 onKeyDown={(e) => { if (e.key === "Enter") navigateSearch(mobileQuery); }}
                 style={{
                   flex: 1,
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  borderRadius: "0.5rem",
+                  background: "#f5f5f5",
+                  border: "1px solid #dfdfdf",
+                  borderRadius: "2px",
                   padding: "0.625rem 0.875rem",
-                  color: "#fff",
+                  color: "#121212",
                   fontSize: "0.9375rem",
+                  fontFamily: "var(--font-sans), system-ui, sans-serif",
                   outline: "none",
                 }}
               />
@@ -237,10 +241,10 @@ export default function Navbar() {
                 aria-label="Search"
                 style={{
                   padding: "0 0.875rem",
-                  backgroundColor: "var(--color-gold-500)",
-                  color: "var(--color-navy-950)",
+                  backgroundColor: "#121212",
+                  color: "#ffffff",
                   border: "none",
-                  borderRadius: "0.5rem",
+                  borderRadius: "2px",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
@@ -250,7 +254,7 @@ export default function Navbar() {
               </button>
             </div>
             {/* Categories */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.125rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
               {CATEGORIES.map((cat) => (
                 <Link
                   key={cat.href}
@@ -258,32 +262,37 @@ export default function Navbar() {
                   onClick={() => setOpen(false)}
                   style={{
                     display: "block",
-                    padding: "0.625rem 0.75rem",
-                    borderRadius: "0.375rem",
-                    fontSize: "0.9375rem",
-                    fontWeight: 500,
-                    color: "var(--color-navy-300)",
+                    padding: "0.75rem 0",
+                    borderBottom: "1px solid #f0f0f0",
+                    fontSize: "0.875rem",
+                    fontWeight: 600,
+                    color: "#333333",
                     textDecoration: "none",
+                    fontFamily: "var(--font-sans), system-ui, sans-serif",
+                    letterSpacing: "0.01em",
                   }}
-                  className="hover:bg-white/10 hover:text-white"
+                  className="hover:text-black"
                 >
                   {cat.label}
                 </Link>
               ))}
             </div>
-            <div style={{ paddingTop: "1rem", borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "0.75rem" }}>
+            <div style={{ paddingTop: "1.25rem" }}>
               <Link
                 href="/subscribe"
                 onClick={() => setOpen(false)}
                 style={{
                   display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
-                  padding: "0.75rem",
-                  borderRadius: "0.5rem",
-                  backgroundColor: "var(--color-gold-500)",
-                  color: "var(--color-navy-950)",
+                  padding: "0.875rem",
+                  border: "1px solid #121212",
+                  backgroundColor: "#121212",
+                  color: "#ffffff",
                   fontWeight: 700,
-                  fontSize: "0.9375rem",
+                  fontSize: "0.8125rem",
                   textDecoration: "none",
+                  fontFamily: "var(--font-sans), system-ui, sans-serif",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
                 }}
               >
                 <Rss size={16} />
