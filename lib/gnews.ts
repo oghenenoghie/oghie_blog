@@ -126,7 +126,7 @@ export async function syncArticlesToSupabase(
     .from("news_cache")
     .select("slug, original_url");
 
-  const existingSlugs = new Set((existing ?? []).map((r: { slug: string }) => r.slug));
+  const existingSlugs = new Set<string>((existing ?? []).map((r: { slug: string }) => r.slug));
   const existingUrls = new Set(
     (existing ?? []).map((r: { original_url: string }) => r.original_url)
   );
