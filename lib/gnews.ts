@@ -169,6 +169,7 @@ export async function getCachedNews(
   topic: string,
   limit = 12
 ): Promise<CachedArticle[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
   const { createStaticClient } = await import("./supabase/server");
   const supabase = createStaticClient();
 
@@ -190,6 +191,7 @@ export async function getCachedNews(
 }
 
 export async function getAllCachedNews(limit = 24): Promise<CachedArticle[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
   const { createStaticClient } = await import("./supabase/server");
   const supabase = createStaticClient();
 
@@ -208,6 +210,7 @@ export async function getAllCachedNews(limit = 24): Promise<CachedArticle[]> {
 export async function getCachedArticleBySlug(
   slug: string
 ): Promise<CachedArticle | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return null;
   const { createStaticClient } = await import("./supabase/server");
   const supabase = createStaticClient();
 
