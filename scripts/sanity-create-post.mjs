@@ -79,6 +79,44 @@ async function sanityMutate(mutations) {
 }
 
 /**
+ * Download an image from a URL and upload it to Sanity's asset store.
+ * Returns the Sanity asset _id (e.g. "image-abc123...").
+ */
+async function uploadImageToSanity(imageUrl) {
+  console.log(`  📷  Fetching image from ${imageUrl}`);
+  const imgRes = await fetch(imageUrl, {
+    headers: { "User-Agent": "oghie-blog/1.0 (sanity-create-post)" },
+    redirect: "follow",
+  });
+  if (!imgRes.ok) {
+    throw new Error(`Failed to fetch image (${imgRes.status}): ${imgRes.url}`);
+  }
+
+  const contentType = imgRes.headers.get("content-type") || "image/jpeg";
+  const imageData = await imgRes.arrayBuffer();
+
+  console.log(`  📤  Uploading image to Sanity (${Math.round(imageData.byteLength / 1024)} KB, ${contentType})...`);
+  const uploadRes = await fetch(
+    `https://${PROJECT_ID}.api.sanity.io/v${API_VER}/assets/images/${DATASET}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": contentType,
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      body: imageData,
+    }
+  );
+
+  if (!uploadRes.ok) {
+    throw new Error(`Failed to upload image: ${uploadRes.status} ${await uploadRes.text()}`);
+  }
+
+  const asset = await uploadRes.json();
+  return asset.document._id;
+}
+
+/**
  * Convert a plain-text body (paragraph blocks separated by blank lines,
  * # for h2, ## for h3) into Sanity Portable Text blocks.
  * Also accepts a pre-built array of Portable Text blocks directly.
@@ -132,8 +170,15 @@ async function main() {
   const post = JSON.parse(raw);
 
   // Validate required fields
-  for (const f of ["title", "slug", "body"]) {
-    if (!post[f]) { console.error(`❌  Missing required field: ${f}`); process.exit(1); }
+  for (const f of ["title", "slug", "body", "imageUrl"]) {
+    if (!post[f]) {
+      console.error(`❌  Missing required field: ${f}`);
+      if (f === "imageUrl") {
+        console.error("    Every blog post must have a hero image.");
+        console.error("    Add \"imageUrl\": \"https://...\" (direct image URL) to your JSON.");
+      }
+      process.exit(1);
+    }
   }
 
   // Resolve category _id by slug
@@ -163,6 +208,21 @@ async function main() {
     console.warn("⚠️  No author found — skipping author field");
   }
 
+  // Upload hero image to Sanity
+  let mainImage;
+  try {
+    const assetId = await uploadImageToSanity(post.imageUrl);
+    mainImage = {
+      _type: "image",
+      asset: { _type: "reference", _ref: assetId },
+      alt: post.imageAlt ?? "",
+    };
+    console.log(`  ✅  Image uploaded: ${assetId}`);
+  } catch (err) {
+    console.error(`❌  Image upload failed: ${err.message}`);
+    process.exit(1);
+  }
+
   // Build the Sanity document (draft)
   const docId = `drafts.${uid()}`;
   const doc = {
@@ -175,6 +235,7 @@ async function main() {
     estimatedReadingTime: post.estimatedReadingTime ?? null,
     aiGenerated: true,
     socialPosted: false,
+    mainImage,
     body: toPortableText(post.body),
     seoTitle:       post.seoTitle       ?? post.title,
     seoDescription: post.seoDescription ?? post.excerpt ?? null,

@@ -13,6 +13,7 @@ export default defineType({
       title: "Hero Image",
       type: "image",
       options: { hotspot: true },
+      validation: (r) => r.required(),
       fields: [
         defineField({ name: "alt", title: "Alt Text", type: "string" }),
         defineField({ name: "caption", title: "Caption", type: "string" }),
