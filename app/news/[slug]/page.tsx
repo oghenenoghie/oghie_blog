@@ -23,9 +23,11 @@ export async function generateMetadata({
   return {
     title: article.title,
     description: article.description ?? undefined,
+    alternates: { canonical: `/news/${slug}` },
     openGraph: {
       title: article.title,
       description: article.description ?? undefined,
+      url: `/news/${slug}`,
       images: article.image_url ? [{ url: article.image_url }] : [],
       type: "article",
       publishedTime: article.published_at ?? undefined,
@@ -33,6 +35,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: article.title,
+      description: article.description ?? undefined,
     },
   };
 }
@@ -89,7 +92,21 @@ export default async function NewsArticlePage({
     .filter((a) => a.topic === article.topic && a.slug !== slug)
     .slice(0, 4);
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oghieblog.com";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    description: article.description ?? undefined,
+    datePublished: article.published_at ?? undefined,
+    image: article.image_url ? [article.image_url] : undefined,
+    publisher: { "@type": "Organization", name: "Oghie Blog", url: siteUrl },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${siteUrl}/news/${slug}` },
+  };
+
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     <main style={{ backgroundColor: "var(--color-navy-50)", minHeight: "100vh" }}>
 
       {/* ── Breadcrumb ── */}
@@ -348,5 +365,6 @@ export default async function NewsArticlePage({
       )}
 
     </main>
+    </>
   );
 }

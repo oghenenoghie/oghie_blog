@@ -1,7 +1,5 @@
 "use client";
 
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import PostCard, { type PostCardData } from "@/components/blog/PostCard";
 import { useState, useEffect, useRef } from "react";
 import { Search, Loader2 } from "lucide-react";
@@ -64,8 +62,6 @@ export default function SearchPage() {
 
   return (
     <>
-      <Navbar />
-
       <main style={{ backgroundColor: "var(--color-navy-50)", minHeight: "70vh" }}>
         {/* Search bar */}
         <div
@@ -185,8 +181,6 @@ export default function SearchPage() {
           )}
         </div>
       </main>
-
-      <Footer />
 
       <style>{`
         @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }

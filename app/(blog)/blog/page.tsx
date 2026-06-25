@@ -8,6 +8,13 @@ export const revalidate = 1800;
 export const metadata: Metadata = {
   title: "Blog | Oghie Blog — Affiliate Marketing Guides & Program Reviews",
   description: "Guides to finding affiliate programs, getting approved, driving traffic, and earning commissions.",
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    title: "Oghie Blog — Affiliate Marketing Guides & Program Reviews",
+    description: "Guides to finding affiliate programs, getting approved, driving traffic, and earning commissions.",
+    url: "/blog",
+    type: "website",
+  },
 };
 
 export default async function BlogPage() {

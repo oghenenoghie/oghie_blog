@@ -1,5 +1,4 @@
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
+import type { Metadata } from "next";
 import HeroSection from "@/components/marketing/HeroSection";
 import NewsCard from "@/components/blog/NewsCard";
 import Image from "next/image";
@@ -12,6 +11,20 @@ import { ArrowRight, Mail, Rss } from "lucide-react";
 import type { PostCardData } from "@/components/blog/PostCard";
 
 export const revalidate = 1800;
+
+export const metadata: Metadata = {
+  title: "Affiliate Marketing Guides & Program Reviews",
+  description:
+    "Honest guides to finding affiliate programs, getting approved, driving traffic, and earning commissions. For beginners and experienced affiliates.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Oghie Blog — Affiliate Marketing Guides & Program Reviews",
+    description:
+      "Honest guides to finding affiliate programs, getting approved, driving traffic, and earning commissions.",
+    url: "/",
+    type: "website",
+  },
+};
 
 // Fallback taglines for categories that have no description in Sanity
 const FALLBACK_TAGLINES: Record<string, string> = {
@@ -251,8 +264,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <Navbar />
-
       <main style={{ backgroundColor: "#ffffff" }}>
         {/* ── Hero ────────────────────────────────────────────── */}
         <HeroSection featured={featuredPost} secondary={secondaryPosts} />
@@ -460,8 +471,6 @@ export default async function HomePage() {
           </p>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }

@@ -25,6 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${label} | Oghie Blog`,
     description: `Digital marketing articles about ${label} — strategies, guides, and expert insights.`,
+    alternates: { canonical: `/blog/categories/${category}` },
+    openGraph: {
+      title: `${label} — Oghie Blog`,
+      description: `Digital marketing articles about ${label} — strategies, guides, and expert insights.`,
+      url: `/blog/categories/${category}`,
+      type: "website",
+    },
   };
 }
 

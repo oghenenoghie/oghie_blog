@@ -1,5 +1,3 @@
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Mail, BookOpen, Zap, Globe, Award } from "lucide-react";
@@ -8,6 +6,14 @@ export const metadata: Metadata = {
   title: "About | Oghie Blog — Affiliate Marketing Guides",
   description:
     "Oghie Blog publishes honest guides on finding affiliate programs, getting approved, driving traffic, and earning consistent commissions online.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Oghie Blog — Affiliate Marketing Guides",
+    description:
+      "Oghie Blog publishes honest guides on finding affiliate programs, getting approved, driving traffic, and earning consistent commissions online.",
+    url: "/about",
+    type: "website",
+  },
 };
 
 const PILLARS = [
@@ -36,8 +42,6 @@ const PILLARS = [
 export default function AboutPage() {
   return (
     <>
-      <Navbar />
-
       <main>
         {/* Hero */}
         <div
@@ -376,8 +380,6 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }

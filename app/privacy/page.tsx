@@ -1,11 +1,10 @@
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Oghie Blog",
   description:
     "Privacy Policy for Oghie Blog — how we collect, use, and protect your personal information.",
+  alternates: { canonical: "/privacy" },
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -39,10 +38,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function PrivacyPage() {
   return (
-    <>
-      <Navbar />
-
-      <main>
+    <main>
         {/* Header */}
         <div
           style={{
@@ -234,9 +230,6 @@ export default function PrivacyPage() {
             </Section>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </>
+    </main>
   );
 }

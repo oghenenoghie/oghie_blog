@@ -1,5 +1,3 @@
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import ContactForm from "@/components/contact/ContactForm";
 import type { Metadata } from "next";
 import { Mail, MessageSquare } from "lucide-react";
@@ -8,14 +6,19 @@ export const metadata: Metadata = {
   title: "Contact | Oghie Blog",
   description:
     "Get in touch with Oghie Blog — for inquiries, guest posts, sponsorships, affiliate partnerships, or content corrections.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact Oghie Blog",
+    description:
+      "Get in touch with Oghie Blog — for inquiries, guest posts, sponsorships, affiliate partnerships, or content corrections.",
+    url: "/contact",
+    type: "website",
+  },
 };
 
 export default function ContactPage() {
   return (
-    <>
-      <Navbar />
-
-      <main>
+    <main>
         {/* Header */}
         <div
           style={{
@@ -231,9 +234,6 @@ export default function ContactPage() {
             </div>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </>
+    </main>
   );
 }

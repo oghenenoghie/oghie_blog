@@ -21,13 +21,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Post Not Found" };
   return {
-    title: `${post.title} | Oghie Blog`,
+    title: post.title,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      images: post.mainImage ? [{ url: urlFor(post.mainImage).width(1200).height(630).url() }] : [],
+      url: `/blog/${slug}`,
+      type: "article",
+      publishedTime: post.publishedAt ?? undefined,
+      authors: post.author?.name ? [post.author.name] : undefined,
+      images: post.mainImage ? [{ url: urlFor(post.mainImage).width(1200).height(630).url(), width: 1200, height: 630, alt: post.title }] : [],
     },
+    twitter: { card: "summary_large_image", title: post.title, description: post.excerpt },
   };
 }
 
@@ -47,7 +53,23 @@ export default async function BlogPostPage({ params }: Props) {
 
   const related = (relatedPosts as PostCardData[]).filter((p) => p.slug.current !== slug).slice(0, 3);
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oghieblog.com";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt ?? undefined,
+    datePublished: post.publishedAt ?? undefined,
+    dateModified: post.publishedAt ?? undefined,
+    author: post.author?.name ? { "@type": "Person", name: post.author.name } : undefined,
+    image: post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : undefined,
+    publisher: { "@type": "Organization", name: "Oghie Blog", url: siteUrl },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${siteUrl}/blog/${slug}` },
+  };
+
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     <article style={{ backgroundColor: "#ffffff" }}>
 
       {/* ── Article header ─────────────────────────────────── */}
@@ -280,5 +302,6 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       )}
     </article>
+    </>
   );
 }

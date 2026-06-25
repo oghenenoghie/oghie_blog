@@ -1,14 +1,17 @@
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 
+export const metadata: Metadata = {
+  title: "You're Subscribed! | Oghie Blog",
+  description: "Welcome to the Oghie Blog community. Your first weekly digest will land in your inbox soon.",
+  alternates: { canonical: "/subscribe/confirmed" },
+};
+
 export default function ConfirmedPage() {
   return (
-    <>
-      <Navbar />
-      <main style={{ minHeight: "70vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "4rem 1rem" }}>
+    <main style={{ minHeight: "70vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "4rem 1rem" }}>
         <div style={{ maxWidth: "480px", textAlign: "center" }}>
           <CheckCircle size={56} style={{ color: "var(--color-teal-500)", margin: "0 auto 1.5rem" }} aria-hidden="true" />
           <h1 style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "2rem", fontWeight: 900, color: "var(--color-navy-900)", marginBottom: "0.875rem" }}>
@@ -26,8 +29,6 @@ export default function ConfirmedPage() {
             </Button>
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+    </main>
   );
 }
