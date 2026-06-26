@@ -1,6 +1,4 @@
 import NewsletterForm from "@/components/marketing/NewsletterForm";
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, TrendingUp, Zap, Shield } from "lucide-react";
 import type { Metadata } from "next";
@@ -8,6 +6,13 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Subscribe | Oghie Blog — Free Weekly Marketing Digest",
   description: "Join 10,000+ marketers. Get AI-curated digital marketing insights, affiliate deal alerts, and SEO strategies every week — free.",
+  alternates: { canonical: "/subscribe" },
+  openGraph: {
+    title: "Subscribe to Oghie Blog — Free Weekly Marketing Digest",
+    description: "Join 10,000+ marketers. Get AI-curated digital marketing insights, affiliate deal alerts, and SEO strategies every week — free.",
+    url: "/subscribe",
+    type: "website",
+  },
 };
 
 const PERKS = [
@@ -19,9 +24,7 @@ const PERKS = [
 
 export default function SubscribePage() {
   return (
-    <>
-      <Navbar />
-      <main>
+    <main>
         <div style={{ background: "linear-gradient(135deg, var(--color-navy-950) 0%, #1E3A5F 100%)", padding: "5rem 0" }}>
           <div className="container-blog" style={{ maxWidth: "680px", textAlign: "center" }}>
             <Badge variant="gold" style={{ marginBottom: "1.25rem" }}>Free Newsletter</Badge>
@@ -61,8 +64,6 @@ export default function SubscribePage() {
             </div>
           </div>
         </section>
-      </main>
-      <Footer />
-    </>
+    </main>
   );
 }

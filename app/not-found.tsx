@@ -1,14 +1,9 @@
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import Link from "next/link";
 import { ArrowLeft, Search, BookOpen, Rss } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <>
-      <Navbar />
-
-      <main
+    <main
         style={{
           backgroundColor: "var(--color-navy-50)",
           minHeight: "70vh",
@@ -181,9 +176,6 @@ export default function NotFound() {
             </div>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </>
+    </main>
   );
 }

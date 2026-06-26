@@ -1,5 +1,3 @@
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import type { Metadata } from "next";
 import { ShieldCheck } from "lucide-react";
 
@@ -7,14 +5,12 @@ export const metadata: Metadata = {
   title: "Affiliate Disclosure | Oghie Blog",
   description:
     "Oghie Blog's affiliate disclosure — how we earn commissions and our commitment to honest, unbiased recommendations.",
+  alternates: { canonical: "/disclosure" },
 };
 
 export default function DisclosurePage() {
   return (
-    <>
-      <Navbar />
-
-      <main>
+    <main>
         {/* Header */}
         <div
           style={{
@@ -271,9 +267,6 @@ export default function DisclosurePage() {
             </div>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </>
+    </main>
   );
 }

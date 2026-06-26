@@ -1,11 +1,10 @@
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Use | Oghie Blog",
   description:
     "Terms and conditions governing your use of Oghie Blog and its content.",
+  alternates: { canonical: "/terms" },
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -39,10 +38,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function TermsPage() {
   return (
-    <>
-      <Navbar />
-
-      <main>
+    <main>
         {/* Header */}
         <div
           style={{
@@ -231,9 +227,6 @@ export default function TermsPage() {
             </Section>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </>
+    </main>
   );
 }

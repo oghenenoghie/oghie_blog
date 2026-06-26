@@ -5,9 +5,17 @@ import NewsCard from "@/components/blog/NewsCard";
 export const revalidate = 3600; // re-fetch from Supabase every hour
 
 export const metadata: Metadata = {
-  title: "Trending News",
+  title: "Affiliate Marketing News & Industry Updates",
   description:
-    "Today's top stories from around the world — breaking news, technology, business, entertainment, and sports.",
+    "The latest affiliate marketing news, digital marketing updates, and industry insights — curated daily for affiliate marketers.",
+  alternates: { canonical: "/news" },
+  openGraph: {
+    title: "Affiliate Marketing News & Industry Updates | Oghie Blog",
+    description:
+      "The latest affiliate marketing news, digital marketing updates, and industry insights — curated daily for affiliate marketers.",
+    url: "/news",
+    type: "website",
+  },
 };
 
 const TOPIC_FILTERS = [

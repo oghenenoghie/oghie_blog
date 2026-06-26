@@ -1,5 +1,4 @@
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
+import type { Metadata } from "next";
 import HeroSection from "@/components/marketing/HeroSection";
 import NewsCard from "@/components/blog/NewsCard";
 import Image from "next/image";
@@ -12,6 +11,20 @@ import { ArrowRight, Mail, Rss } from "lucide-react";
 import type { PostCardData } from "@/components/blog/PostCard";
 
 export const revalidate = 1800;
+
+export const metadata: Metadata = {
+  title: "Affiliate Marketing Guides & Program Reviews",
+  description:
+    "Honest guides to finding affiliate programs, getting approved, driving traffic, and earning commissions. For beginners and experienced affiliates.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Oghie Blog — Affiliate Marketing Guides & Program Reviews",
+    description:
+      "Honest guides to finding affiliate programs, getting approved, driving traffic, and earning commissions.",
+    url: "/",
+    type: "website",
+  },
+};
 
 // Fallback taglines for categories that have no description in Sanity
 const FALLBACK_TAGLINES: Record<string, string> = {
@@ -237,7 +250,7 @@ function CategorySection({ category }: { category: CategoryWithPosts }) {
 
 export default async function HomePage() {
   const [posts, newsItems, categoriesWithPosts] = await Promise.allSettled([
-    getLatestPosts(4),
+    getLatestPosts(5),
     getAllCachedNews(6),
     getCategoriesWithPosts(4),
   ]);
@@ -247,12 +260,10 @@ export default async function HomePage() {
   const categories: CategoryWithPosts[] = categoriesWithPosts.status === "fulfilled" ? categoriesWithPosts.value : [];
 
   const featuredPost = latestPosts[0] ?? null;
-  const secondaryPosts = latestPosts.slice(1, 4);
+  const secondaryPosts = latestPosts.slice(1, 5);
 
   return (
     <>
-      <Navbar />
-
       <main style={{ backgroundColor: "#ffffff" }}>
         {/* ── Hero ────────────────────────────────────────────── */}
         <HeroSection featured={featuredPost} secondary={secondaryPosts} />
@@ -460,8 +471,6 @@ export default async function HomePage() {
           </p>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }
