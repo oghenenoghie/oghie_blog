@@ -250,7 +250,7 @@ function CategorySection({ category }: { category: CategoryWithPosts }) {
 
 export default async function HomePage() {
   const [posts, newsItems, categoriesWithPosts] = await Promise.allSettled([
-    getLatestPosts(4),
+    getLatestPosts(5),
     getAllCachedNews(6),
     getCategoriesWithPosts(4),
   ]);
@@ -260,7 +260,7 @@ export default async function HomePage() {
   const categories: CategoryWithPosts[] = categoriesWithPosts.status === "fulfilled" ? categoriesWithPosts.value : [];
 
   const featuredPost = latestPosts[0] ?? null;
-  const secondaryPosts = latestPosts.slice(1, 4);
+  const secondaryPosts = latestPosts.slice(1, 5);
 
   return (
     <>
