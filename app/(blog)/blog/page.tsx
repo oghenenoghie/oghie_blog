@@ -1,6 +1,5 @@
 import PostCard, { type PostCardData } from "@/components/blog/PostCard";
-import { getLatestPosts, getAllCategories } from "@/sanity/lib/queries";
-import Link from "next/link";
+import { getLatestPosts } from "@/sanity/lib/queries";
 import type { Metadata } from "next";
 
 export const revalidate = 1800;
@@ -18,13 +17,8 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-  const [posts, categories] = await Promise.allSettled([
-    getLatestPosts(24),
-    getAllCategories(),
-  ]);
-
-  const allPosts: PostCardData[] = posts.status === "fulfilled" ? posts.value : [];
-  const allCategories = categories.status === "fulfilled" ? categories.value : [];
+  const posts = await getLatestPosts(24).catch(() => []);
+  const allPosts: PostCardData[] = posts;
 
   return (
     <div style={{ backgroundColor: "#ffffff" }}>
@@ -56,56 +50,6 @@ export default async function BlogPage() {
           </p>
         </div>
       </div>
-
-      {/* ── Category filter ───────────────────────────────── */}
-      {allCategories.length > 0 && (
-        <div style={{ borderBottom: "1px solid #dfdfdf", padding: "0" }}>
-          <div className="container-blog" style={{ display: "flex", gap: "0", flexWrap: "nowrap", overflowX: "auto", alignItems: "center" }}>
-            <Link
-              href="/blog"
-              style={{
-                display: "inline-block",
-                padding: "0.75rem 1rem 0.75rem 0",
-                marginRight: "1rem",
-                fontSize: "0.6875rem",
-                fontWeight: 700,
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-                color: "#121212",
-                textDecoration: "none",
-                borderBottom: "2px solid #121212",
-                fontFamily: "var(--font-sans), system-ui, sans-serif",
-                whiteSpace: "nowrap",
-              }}
-            >
-              All
-            </Link>
-            {allCategories.map((cat: { _id: string; title: string; slug: { current: string } }) => (
-              <Link
-                key={cat._id}
-                href={`/blog/categories/${cat.slug.current}`}
-                style={{
-                  display: "inline-block",
-                  padding: "0.75rem 1rem",
-                  fontSize: "0.6875rem",
-                  fontWeight: 600,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  color: "#555",
-                  textDecoration: "none",
-                  borderBottom: "2px solid transparent",
-                  fontFamily: "var(--font-sans), system-ui, sans-serif",
-                  whiteSpace: "nowrap",
-                  transition: "color 0.15s, border-color 0.15s",
-                }}
-                className="hover:text-black hover:border-black"
-              >
-                {cat.title}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* ── Posts grid ────────────────────────────────────── */}
       <div style={{ padding: "2.5rem 0 5rem" }}>
