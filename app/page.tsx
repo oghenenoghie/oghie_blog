@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import HeroSection from "@/components/marketing/HeroSection";
+import LatestNewsCarousel from "@/components/blog/LatestNewsCarousel";
 import NewsCard from "@/components/blog/NewsCard";
 import Image from "next/image";
 import Link from "next/link";
@@ -251,7 +252,7 @@ function CategorySection({ category }: { category: CategoryWithPosts }) {
 export default async function HomePage() {
   const [posts, newsItems, categoriesWithPosts] = await Promise.allSettled([
     getLatestPosts(5),
-    getAllCachedNews(6),
+    getAllCachedNews(12),
     getCategoriesWithPosts(4),
   ]);
 
@@ -288,27 +289,9 @@ export default async function HomePage() {
                 </div>
               )}
 
-              {/* Trending news below category sections */}
+              {/* Latest news carousel */}
               {latestNews.length > 0 && (
-                <section style={{ borderTop: "3px solid #121212", paddingTop: "1.25rem", paddingBottom: "3rem" }}>
-                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                    <h2 style={{ fontFamily: SERIF, fontSize: "clamp(1.25rem, 2.5vw, 1.625rem)", fontWeight: 700, color: "#121212", lineHeight: 1.1, letterSpacing: "-0.01em" }}>
-                      Trending News
-                    </h2>
-                    <Link href="/news" style={{ display: "flex", alignItems: "center", gap: "0.25rem", fontFamily: SANS, fontSize: "0.75rem", fontWeight: 600, color: "#555", textDecoration: "none" }} className="hover:text-black">
-                      All news <ArrowRight size={12} />
-                    </Link>
-                  </div>
-                  <p style={{ fontFamily: BODY, fontSize: "0.9375rem", fontStyle: "italic", color: "#6e6e6e", marginBottom: "0.75rem" }}>
-                    The latest from across the affiliate marketing industry.
-                  </p>
-                  <div style={{ height: "1px", backgroundColor: "#dfdfdf", marginBottom: "1.5rem" }} />
-                  <div style={{ display: "grid", gap: "1rem" }} className="sm:grid-cols-2 lg:grid-cols-3">
-                    {latestNews.slice(0, 6).map((article) => (
-                      <NewsCard key={article.slug} article={article} />
-                    ))}
-                  </div>
-                </section>
+                <LatestNewsCarousel articles={latestNews} />
               )}
             </div>
 

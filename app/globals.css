@@ -158,6 +158,9 @@ a { transition: color 0.2s; }
   outline-offset: 2px;
 }
 
+/* ── Carousel: hide scrollbar cross-browser ──────────────── */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
 /* ── Reusable classes ────────────────────────────────────── */
 
 /* CTA — affiliate primary action */
