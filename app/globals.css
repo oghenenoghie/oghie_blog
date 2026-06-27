@@ -455,3 +455,15 @@ a { transition: color 0.2s; }
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
+
+/* ── Blog carousel ───────────────────────────────────── */
+.blog-carousel-track { scrollbar-width: none; -ms-overflow-style: none; }
+.blog-carousel-track::-webkit-scrollbar { display: none; }
+
+.blog-carousel-card { width: 100%; }
+@media (min-width: 640px) {
+  .blog-carousel-card { width: calc(50% - 0.75rem); }
+}
+@media (min-width: 1024px) {
+  .blog-carousel-card { width: calc(33.333% - 1rem); }
+}
