@@ -119,6 +119,7 @@ export async function syncArticlesToSupabase(
   topic: string
 ): Promise<number> {
   const { createServiceClient } = await import("./supabase/server");
+  const { getUnsplashImageForTopic } = await import("./unsplash");
   const supabase = createServiceClient();
 
   // Fetch slugs already in DB to ensure uniqueness
@@ -131,26 +132,40 @@ export async function syncArticlesToSupabase(
     (existing ?? []).map((r: { original_url: string }) => r.original_url)
   );
 
-  const rows = articles
-    .filter((a) => !existingUrls.has(a.url))
-    .map((a) => {
+  const newArticles = articles.filter((a) => !existingUrls.has(a.url));
+
+  // Build rows — fetch one Unsplash image per topic as fallback for articles
+  // that GNews returned without an image.
+  let unsplashFallback: string | null = null;
+  const rows = await Promise.all(
+    newArticles.map(async (a) => {
       const baseSlug = slugify(a.title);
       const slug = makeUniqueSlug(baseSlug, existingSlugs);
       existingSlugs.add(slug);
+
+      let imageUrl = a.image;
+      if (!imageUrl) {
+        // Reuse one Unsplash image per batch to avoid hammering the rate limit
+        if (!unsplashFallback) {
+          unsplashFallback = await getUnsplashImageForTopic(topic);
+        }
+        imageUrl = unsplashFallback;
+      }
 
       return {
         slug,
         title: a.title,
         description: stripGNewsMarker(a.description),
         content: stripGNewsMarker(a.content),
-        image_url: a.image,
+        image_url: imageUrl,
         source_name: a.source.name,
         source_url: a.source.url,
         original_url: a.url,
         topic,
         published_at: a.publishedAt,
       };
-    });
+    })
+  );
 
   if (rows.length === 0) return 0;
 
