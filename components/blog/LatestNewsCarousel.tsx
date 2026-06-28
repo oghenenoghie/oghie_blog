@@ -16,6 +16,23 @@ const TOPIC_LABELS: Record<string, string> = {
   seo:                 "SEO",
   technology:          "Technology",
   business:            "Business",
+  breaking:            "Breaking",
+  world:               "World",
+  entertainment:       "Entertainment",
+  sports:              "Sports",
+};
+
+// Gradient shown when a card has no image or the image fails to load
+const TOPIC_GRADIENTS: Record<string, string> = {
+  "digital-marketing": "linear-gradient(135deg, #185FA5 0%, #0C447C 100%)",
+  affiliate:           "linear-gradient(135deg, #1D9E75 0%, #0F6E56 100%)",
+  seo:                 "linear-gradient(135deg, #378ADD 0%, #185FA5 100%)",
+  technology:          "linear-gradient(135deg, #334155 0%, #0F172A 100%)",
+  business:            "linear-gradient(135deg, #EF9F27 0%, #BA7517 100%)",
+  breaking:            "linear-gradient(135deg, #d0021b 0%, #8B0010 100%)",
+  world:               "linear-gradient(135deg, #475569 0%, #1E293B 100%)",
+  entertainment:       "linear-gradient(135deg, #6366f1 0%, #4338ca 100%)",
+  sports:              "linear-gradient(135deg, #0F6E56 0%, #04342C 100%)",
 };
 
 function timeAgo(dateStr: string | null): string {
@@ -214,9 +231,36 @@ function CarouselCard({ article }: { article: CachedArticle }) {
       className="group"
       style={{ display: "flex", flexDirection: "column", height: "100%", textDecoration: "none" }}
     >
-      {/* Image */}
-      {article.image_url && (
-        <div style={{ position: "relative", height: "160px", overflow: "hidden", marginBottom: "0.875rem", flexShrink: 0 }}>
+      {/* Image — gradient placeholder always visible; photo layers on top */}
+      <div style={{
+        position: "relative",
+        height: "160px",
+        overflow: "hidden",
+        marginBottom: "0.875rem",
+        flexShrink: 0,
+        background: TOPIC_GRADIENTS[article.topic] ?? "linear-gradient(135deg, #1E293B 0%, #0F172A 100%)",
+      }}>
+        {/* Placeholder text centred on the gradient */}
+        <div style={{
+          position: "absolute", inset: 0,
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          gap: "0.25rem",
+          opacity: article.image_url ? 0 : 1,
+        }}>
+          <span style={{
+            fontFamily: SANS,
+            fontSize: "0.625rem",
+            fontWeight: 700,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.55)",
+          }}>
+            {TOPIC_LABELS[article.topic] ?? article.topic}
+          </span>
+        </div>
+        {/* Photo overlays the gradient when available */}
+        {article.image_url && (
           <Image
             src={article.image_url}
             alt={article.title}
@@ -224,8 +268,8 @@ function CarouselCard({ article }: { article: CachedArticle }) {
             className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
             unoptimized
           />
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Topic + age */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
