@@ -3,7 +3,12 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import {
+  ChevronLeft, ChevronRight, ArrowRight,
+  Link2, Search, Cpu, TrendingUp, Megaphone,
+  Zap, Globe, Film, Trophy, Newspaper,
+} from "lucide-react";
+import type { LucideProps } from "lucide-react";
 import type { CachedArticle } from "@/lib/gnews";
 
 const SERIF = "var(--font-display), 'Libre Baskerville', Georgia, serif";
@@ -22,17 +27,90 @@ const TOPIC_LABELS: Record<string, string> = {
   sports:              "Sports",
 };
 
-// Gradient shown when a card has no image or the image fails to load
-const TOPIC_GRADIENTS: Record<string, string> = {
-  "digital-marketing": "linear-gradient(135deg, #185FA5 0%, #0C447C 100%)",
-  affiliate:           "linear-gradient(135deg, #1D9E75 0%, #0F6E56 100%)",
-  seo:                 "linear-gradient(135deg, #378ADD 0%, #185FA5 100%)",
-  technology:          "linear-gradient(135deg, #334155 0%, #0F172A 100%)",
-  business:            "linear-gradient(135deg, #EF9F27 0%, #BA7517 100%)",
-  breaking:            "linear-gradient(135deg, #d0021b 0%, #8B0010 100%)",
-  world:               "linear-gradient(135deg, #475569 0%, #1E293B 100%)",
-  entertainment:       "linear-gradient(135deg, #6366f1 0%, #4338ca 100%)",
-  sports:              "linear-gradient(135deg, #0F6E56 0%, #04342C 100%)",
+// Each topic gets a multi-stop mesh gradient (several radial blobs over a dark base)
+// so the placeholder looks like an editorial colour field, not a flat CSS box.
+const TOPIC_MESH: Record<string, string> = {
+  affiliate: `
+    radial-gradient(ellipse at 18% 78%, rgba(93,202,165,0.80) 0%, transparent 52%),
+    radial-gradient(ellipse at 82% 18%, rgba(29,158,117,0.90) 0%, transparent 52%),
+    radial-gradient(ellipse at 58% 58%, rgba(15,110,86,0.65) 0%, transparent 62%),
+    radial-gradient(ellipse at 40% 10%, rgba(159,225,203,0.40) 0%, transparent 40%),
+    #04342C`,
+
+  seo: `
+    radial-gradient(ellipse at 28% 72%, rgba(133,183,235,0.75) 0%, transparent 52%),
+    radial-gradient(ellipse at 78% 25%, rgba(55,138,221,0.90) 0%, transparent 52%),
+    radial-gradient(ellipse at 52% 52%, rgba(24,95,165,0.70) 0%, transparent 62%),
+    radial-gradient(ellipse at 15% 20%, rgba(181,212,244,0.40) 0%, transparent 38%),
+    #042C53`,
+
+  "digital-marketing": `
+    radial-gradient(ellipse at 72% 32%, rgba(55,138,221,0.82) 0%, transparent 52%),
+    radial-gradient(ellipse at 22% 72%, rgba(24,95,165,0.90) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 88%, rgba(12,68,124,0.65) 0%, transparent 58%),
+    radial-gradient(ellipse at 85% 75%, rgba(181,212,244,0.35) 0%, transparent 36%),
+    #042C53`,
+
+  technology: `
+    radial-gradient(ellipse at 62% 38%, rgba(99,102,241,0.75) 0%, transparent 52%),
+    radial-gradient(ellipse at 18% 82%, rgba(51,65,85,0.90) 0%, transparent 52%),
+    radial-gradient(ellipse at 80% 78%, rgba(30,41,59,0.70) 0%, transparent 58%),
+    radial-gradient(ellipse at 38% 12%, rgba(148,163,184,0.35) 0%, transparent 38%),
+    #0F172A`,
+
+  business: `
+    radial-gradient(ellipse at 68% 28%, rgba(250,199,117,0.80) 0%, transparent 52%),
+    radial-gradient(ellipse at 18% 72%, rgba(239,159,39,0.90) 0%, transparent 52%),
+    radial-gradient(ellipse at 48% 88%, rgba(186,117,23,0.68) 0%, transparent 58%),
+    radial-gradient(ellipse at 82% 78%, rgba(133,56,6,0.55) 0%, transparent 42%),
+    #412402`,
+
+  breaking: `
+    radial-gradient(ellipse at 48% 28%, rgba(255,80,80,0.82) 0%, transparent 52%),
+    radial-gradient(ellipse at 18% 78%, rgba(208,2,27,0.90) 0%, transparent 52%),
+    radial-gradient(ellipse at 80% 62%, rgba(139,0,16,0.68) 0%, transparent 58%),
+    radial-gradient(ellipse at 70% 12%, rgba(255,140,140,0.38) 0%, transparent 38%),
+    #3D0008`,
+
+  world: `
+    radial-gradient(ellipse at 35% 65%, rgba(100,116,139,0.82) 0%, transparent 52%),
+    radial-gradient(ellipse at 75% 28%, rgba(71,85,105,0.90) 0%, transparent 52%),
+    radial-gradient(ellipse at 58% 85%, rgba(30,41,59,0.65) 0%, transparent 58%),
+    radial-gradient(ellipse at 15% 18%, rgba(148,163,184,0.40) 0%, transparent 38%),
+    #0F172A`,
+
+  entertainment: `
+    radial-gradient(ellipse at 30% 30%, rgba(167,139,250,0.80) 0%, transparent 52%),
+    radial-gradient(ellipse at 75% 72%, rgba(99,102,241,0.90) 0%, transparent 52%),
+    radial-gradient(ellipse at 55% 55%, rgba(67,56,202,0.68) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 15%, rgba(196,181,253,0.40) 0%, transparent 38%),
+    #1e1b4b`,
+
+  sports: `
+    radial-gradient(ellipse at 22% 75%, rgba(93,202,165,0.75) 0%, transparent 52%),
+    radial-gradient(ellipse at 78% 22%, rgba(15,110,86,0.90) 0%, transparent 52%),
+    radial-gradient(ellipse at 55% 55%, rgba(4,52,44,0.72) 0%, transparent 62%),
+    radial-gradient(ellipse at 65% 80%, rgba(159,225,203,0.38) 0%, transparent 38%),
+    #04342C`,
+};
+
+const FALLBACK_MESH = `
+  radial-gradient(ellipse at 30% 70%, rgba(71,85,105,0.85) 0%, transparent 52%),
+  radial-gradient(ellipse at 75% 25%, rgba(30,41,59,0.90) 0%, transparent 52%),
+  #0F172A`;
+
+// Topic → Lucide icon component
+type IconComponent = React.FC<LucideProps>;
+const TOPIC_ICONS: Record<string, IconComponent> = {
+  affiliate:           Link2,
+  seo:                 Search,
+  technology:          Cpu,
+  business:            TrendingUp,
+  "digital-marketing": Megaphone,
+  breaking:            Zap,
+  world:               Globe,
+  entertainment:       Film,
+  sports:              Trophy,
 };
 
 function timeAgo(dateStr: string | null): string {
@@ -46,9 +124,8 @@ function timeAgo(dateStr: string | null): string {
   return new Date(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-// Cards visible per page on desktop
 const VISIBLE = 3;
-const GAP = 20; // px (1.25rem)
+const GAP = 20;
 
 interface Props {
   articles: CachedArticle[];
@@ -63,9 +140,6 @@ export default function LatestNewsCarousel({ articles }: Props) {
   const scrollToPage = useCallback((p: number) => {
     const el = viewportRef.current;
     if (!el) return;
-    // scrollLeft for page p: p * VISIBLE cards, each (cardW + GAP)
-    // cardW = (el.offsetWidth - (VISIBLE-1)*GAP) / VISIBLE
-    // one page scroll = VISIBLE * (cardW + GAP) = el.offsetWidth + GAP
     el.scrollTo({ left: p * (el.offsetWidth + GAP), behavior: "smooth" });
     setPage(p);
   }, []);
@@ -73,7 +147,6 @@ export default function LatestNewsCarousel({ articles }: Props) {
   const prev = useCallback(() => scrollToPage(Math.max(0, page - 1)), [page, scrollToPage]);
   const next = useCallback(() => scrollToPage(Math.min(pageCount - 1, page + 1)), [page, pageCount, scrollToPage]);
 
-  // Auto-advance every 6 s
   useEffect(() => {
     if (pageCount <= 1) return;
     const t = setInterval(() => {
@@ -91,21 +164,31 @@ export default function LatestNewsCarousel({ articles }: Props) {
 
   return (
     <section style={{ borderTop: "3px solid #121212", paddingTop: "1.25rem", paddingBottom: "3rem" }}>
+      {/* Shared SVG filter — defines fractal noise once for all placeholder thumbnails */}
+      <svg width="0" height="0" style={{ position: "absolute", pointerEvents: "none" }}>
+        <defs>
+          <filter id="carousel-grain" x="0%" y="0%" width="100%" height="100%"
+            colorInterpolationFilters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="4"
+              stitchTiles="stitch" result="noise" />
+            <feColorMatrix type="saturate" values="0" in="noise" result="grey" />
+            <feBlend in="SourceGraphic" in2="grey" mode="overlay" result="blended" />
+            <feComposite in="blended" in2="SourceGraphic" operator="in" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* ── Header ─────────────────────────────────────────── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem", gap: "0.75rem", flexWrap: "wrap" }}>
         <h2 style={{
           fontFamily: SERIF,
           fontSize: "clamp(1.25rem, 2.5vw, 1.625rem)",
-          fontWeight: 700,
-          color: "#121212",
-          lineHeight: 1.1,
-          letterSpacing: "-0.01em",
+          fontWeight: 700, color: "#121212",
+          lineHeight: 1.1, letterSpacing: "-0.01em",
         }}>
           Latest News
         </h2>
-
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          {/* Nav arrows */}
           {pageCount > 1 && (
             <>
               <NavButton onClick={prev} disabled={page === 0} label="Previous page">
@@ -118,11 +201,7 @@ export default function LatestNewsCarousel({ articles }: Props) {
           )}
           <Link
             href="/news"
-            style={{
-              display: "flex", alignItems: "center", gap: "0.25rem",
-              fontFamily: SANS, fontSize: "0.75rem", fontWeight: 600,
-              color: "#555", textDecoration: "none",
-            }}
+            style={{ display: "flex", alignItems: "center", gap: "0.25rem", fontFamily: SANS, fontSize: "0.75rem", fontWeight: 600, color: "#555", textDecoration: "none" }}
             className="hover:text-black"
           >
             All news <ArrowRight size={12} />
@@ -145,7 +224,6 @@ export default function LatestNewsCarousel({ articles }: Props) {
           overflowX: "auto",
           scrollBehavior: "smooth",
           scrollbarWidth: "none",
-          /* scroll-snap lets touch users swipe naturally */
           scrollSnapType: "x mandatory",
         }}
       >
@@ -153,7 +231,6 @@ export default function LatestNewsCarousel({ articles }: Props) {
           <div
             key={article.id}
             style={{
-              /* each card = 1/VISIBLE of the viewport minus gaps */
               flex: `0 0 calc((100% - ${(VISIBLE - 1) * GAP}px) / ${VISIBLE})`,
               minWidth: "220px",
               scrollSnapAlign: "start",
@@ -164,7 +241,7 @@ export default function LatestNewsCarousel({ articles }: Props) {
         ))}
       </div>
 
-      {/* ── Dot indicators ─────────────────────────────────── */}
+      {/* ── Dots ───────────────────────────────────────────── */}
       {pageCount > 1 && (
         <div style={{ display: "flex", justifyContent: "center", gap: "0.375rem", marginTop: "1.25rem" }}>
           {Array.from({ length: pageCount }).map((_, i) => (
@@ -177,9 +254,7 @@ export default function LatestNewsCarousel({ articles }: Props) {
                 height: "0.5rem",
                 borderRadius: "9999px",
                 backgroundColor: i === page ? "#121212" : "#dfdfdf",
-                border: "none",
-                padding: 0,
-                cursor: "pointer",
+                border: "none", padding: 0, cursor: "pointer",
                 transition: "width 0.25s ease, background-color 0.25s ease",
               }}
             />
@@ -192,22 +267,14 @@ export default function LatestNewsCarousel({ articles }: Props) {
 
 // ── Nav button ──────────────────────────────────────────────
 
-function NavButton({
-  onClick, disabled, label, children,
-}: {
-  onClick: () => void;
-  disabled: boolean;
-  label: string;
-  children: React.ReactNode;
+function NavButton({ onClick, disabled, label, children }: {
+  onClick: () => void; disabled: boolean; label: string; children: React.ReactNode;
 }) {
   return (
     <button
-      onClick={onClick}
-      disabled={disabled}
-      aria-label={label}
+      onClick={onClick} disabled={disabled} aria-label={label}
       style={{
-        width: "2rem", height: "2rem",
-        borderRadius: "50%",
+        width: "2rem", height: "2rem", borderRadius: "50%",
         border: `1.5px solid ${disabled ? "#f0f0f0" : "#dfdfdf"}`,
         backgroundColor: "#fff",
         display: "flex", alignItems: "center", justifyContent: "center",
@@ -222,6 +289,58 @@ function NavButton({
   );
 }
 
+// ── Placeholder thumbnail ────────────────────────────────────
+
+function ImagePlaceholder({ topic }: { topic: string }) {
+  const Icon = TOPIC_ICONS[topic] ?? Newspaper;
+  const mesh = TOPIC_MESH[topic] ?? FALLBACK_MESH;
+
+  return (
+    <div style={{ position: "absolute", inset: 0, background: mesh }}>
+      {/* Grain overlay — references the shared SVG filter */}
+      <div
+        style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")",
+          backgroundRepeat: "repeat",
+          backgroundSize: "128px 128px",
+          opacity: 0.08,
+          mixBlendMode: "overlay",
+        }}
+      />
+      {/* Radial vignette — pulls focus to centre */}
+      <div style={{
+        position: "absolute", inset: 0,
+        background: "radial-gradient(ellipse at 50% 40%, transparent 25%, rgba(0,0,0,0.45) 100%)",
+      }} />
+      {/* Light specular highlight — top-left corner */}
+      <div style={{
+        position: "absolute", inset: 0,
+        background: "radial-gradient(ellipse at 15% 15%, rgba(255,255,255,0.12) 0%, transparent 55%)",
+      }} />
+      {/* Topic icon — centred, ghosted */}
+      <div style={{
+        position: "absolute", inset: 0,
+        display: "flex", alignItems: "center", justifyContent: "center",
+      }}>
+        <Icon size={52} strokeWidth={0.9} color="rgba(255,255,255,0.18)" />
+      </div>
+      {/* Topic label — bottom left */}
+      <span style={{
+        position: "absolute", bottom: "0.625rem", left: "0.75rem",
+        fontFamily: SANS,
+        fontSize: "0.5625rem",
+        fontWeight: 700,
+        letterSpacing: "0.13em",
+        textTransform: "uppercase",
+        color: "rgba(255,255,255,0.55)",
+      }}>
+        {TOPIC_LABELS[topic] ?? topic}
+      </span>
+    </div>
+  );
+}
+
 // ── Individual card ─────────────────────────────────────────
 
 function CarouselCard({ article }: { article: CachedArticle }) {
@@ -231,36 +350,12 @@ function CarouselCard({ article }: { article: CachedArticle }) {
       className="group"
       style={{ display: "flex", flexDirection: "column", height: "100%", textDecoration: "none" }}
     >
-      {/* Image — gradient placeholder always visible; photo layers on top */}
+      {/* Thumbnail */}
       <div style={{
-        position: "relative",
-        height: "160px",
-        overflow: "hidden",
-        marginBottom: "0.875rem",
-        flexShrink: 0,
-        background: TOPIC_GRADIENTS[article.topic] ?? "linear-gradient(135deg, #1E293B 0%, #0F172A 100%)",
+        position: "relative", height: "168px",
+        overflow: "hidden", marginBottom: "0.875rem", flexShrink: 0,
       }}>
-        {/* Placeholder text centred on the gradient */}
-        <div style={{
-          position: "absolute", inset: 0,
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          gap: "0.25rem",
-          opacity: article.image_url ? 0 : 1,
-        }}>
-          <span style={{
-            fontFamily: SANS,
-            fontSize: "0.625rem",
-            fontWeight: 700,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.55)",
-          }}>
-            {TOPIC_LABELS[article.topic] ?? article.topic}
-          </span>
-        </div>
-        {/* Photo overlays the gradient when available */}
-        {article.image_url && (
+        {article.image_url ? (
           <Image
             src={article.image_url}
             alt={article.title}
@@ -268,18 +363,24 @@ function CarouselCard({ article }: { article: CachedArticle }) {
             className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
             unoptimized
           />
+        ) : (
+          <ImagePlaceholder topic={article.topic} />
         )}
+        {/* Subtle hover-darkening scrim */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundColor: "rgba(0,0,0,0)",
+          transition: "background-color 0.3s",
+        }}
+          className="group-hover:bg-black/10"
+        />
       </div>
 
       {/* Topic + age */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
         <span style={{
-          fontFamily: SANS,
-          fontSize: "0.625rem",
-          fontWeight: 700,
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-          color: "#185FA5",
+          fontFamily: SANS, fontSize: "0.625rem", fontWeight: 700,
+          letterSpacing: "0.1em", textTransform: "uppercase", color: "#185FA5",
         }}>
           {TOPIC_LABELS[article.topic] ?? article.topic}
         </span>
@@ -291,17 +392,11 @@ function CarouselCard({ article }: { article: CachedArticle }) {
       {/* Title */}
       <h3
         style={{
-          fontFamily: SERIF,
-          fontSize: "1rem",
-          fontWeight: 700,
-          color: "#121212",
-          lineHeight: 1.35,
-          marginBottom: "0.5rem",
+          fontFamily: SERIF, fontSize: "1rem", fontWeight: 700,
+          color: "#121212", lineHeight: 1.35, marginBottom: "0.5rem",
           letterSpacing: "-0.01em",
-          display: "-webkit-box",
-          WebkitLineClamp: 3,
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
+          display: "-webkit-box", WebkitLineClamp: 3,
+          WebkitBoxOrient: "vertical", overflow: "hidden",
           transition: "color 0.15s",
         }}
         className="group-hover:text-gray-600"
@@ -312,17 +407,11 @@ function CarouselCard({ article }: { article: CachedArticle }) {
       {/* Description */}
       {article.description && (
         <p style={{
-          fontFamily: BODY,
-          fontSize: "0.875rem",
-          fontStyle: "italic",
-          color: "#555",
-          lineHeight: 1.6,
-          display: "-webkit-box",
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
-          marginBottom: "0.75rem",
-          flex: 1,
+          fontFamily: BODY, fontSize: "0.875rem", fontStyle: "italic",
+          color: "#555", lineHeight: 1.6,
+          display: "-webkit-box", WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical", overflow: "hidden",
+          marginBottom: "0.75rem", flex: 1,
         }}>
           {article.description}
         </p>
@@ -330,12 +419,9 @@ function CarouselCard({ article }: { article: CachedArticle }) {
 
       {/* Footer */}
       <div style={{
-        marginTop: "auto",
-        borderTop: "1px solid #f0f0f0",
+        marginTop: "auto", borderTop: "1px solid #f0f0f0",
         paddingTop: "0.625rem",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
         <span style={{ fontFamily: SANS, fontSize: "0.6875rem", fontWeight: 600, color: "#888" }}>
           {article.source_name}
