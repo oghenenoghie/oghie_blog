@@ -12,6 +12,7 @@ const CATEGORIES = [
   { label: "Tools & Reviews",    href: "/blog/categories/tools"            },
   { label: "Passive Income",     href: "/blog/categories/passive-income"   },
   { label: "Trending News",      href: "/news"                             },
+  { label: "Project Finance",    href: "/project-finance"                  },
 ];
 
 export default function Navbar() {
